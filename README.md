@@ -58,7 +58,7 @@ Das **AufgabenTool** ermöglicht es, Aufgaben aus PDF-Dokumenten zu extrahieren,
 
 ```bash
 # In das Projektverzeichnis wechseln
-cd C:\Users\chwin\Desktop\Projekte\AufgabenTool
+cd C:\Users\<User>\pfad\zum\repo
 
 # Server starten (PowerShell)
 npx serve -p 3000
