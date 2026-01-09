@@ -1,7 +1,7 @@
 # learn-with-fun
 Ein intelligenter Workflow-Assistent zur Verarbeitung und Transformation von Aufgaben mit KI-Unterstützung.
 
-![AufgabenTool Screenshot](https://via.placeholder.com/800x400/1a1b26/7aa2f7?text=AufgabenTool)
+
 
 > ⚠️ **Hinweis zur Entstehung**  
 > Dieses Tool wurde **zweckmäßig mit KI-generiertem Code** (Claude/Cursor) erstellt und dient primär als funktionaler Prototyp. Es erhebt keinen Anspruch auf durchdachte Softwareentwicklung, Best Practices oder produktionsreife Codequalität. Der Fokus lag auf schneller Umsetzung der gewünschten Funktionalität – nicht auf Architektur, Wartbarkeit oder Skalierbarkeit.
