@@ -179,6 +179,9 @@ Du kannst die KI-Prompts anpassen:
 
 ### Modul 1: Aufgaben einlesen
 
+<img width="1110" height="304" alt="image" src="https://github.com/user-attachments/assets/61a50af8-0375-4a83-8ced-b3f09d1e16ed" />
+
+
 **Funktion:** Extrahiert Aufgaben aus PDF-Dokumenten
 
 **Ablauf:**
@@ -199,6 +202,7 @@ Du kannst die KI-Prompts anpassen:
 
 ### Modul 2: Aufgaben transformieren
 
+
 **Funktion:** Wandelt Aufgaben in ein neues Themengebiet um
 
 **Ablauf:**
@@ -216,6 +220,7 @@ Transformiert (Fortnite):
 Wie viele Shield Potions hat jeder Spieler zur Verfügung, 
 wenn nur noch 8 Spieler übrig sind?"
 ```
+<img width="1082" height="807" alt="image" src="https://github.com/user-attachments/assets/8e390ef6-8247-45a3-892e-dc161145166e" />
 
 ### Modul 3: Export (geplant)
 
