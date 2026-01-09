@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AufgabenTool</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- PDF.js für PDF-Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">⚡</span>
+                <span class="logo-text">AufgabenTool</span>
+            </div>
+            
+            <nav class="nav">
+                <button class="theme-toggle" id="themeToggle" aria-label="Theme wechseln">
+                    <span class="theme-icon sun">☀️</span>
+                    <span class="theme-icon moon">🌙</span>
+                    <span class="toggle-slider"></span>
+                </button>
+                <button class="settings-btn" id="settingsBtn" aria-label="Einstellungen">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                    </svg>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <div class="welcome-section">
+                <h1>Willkommen</h1>
+                <p class="subtitle">Dein Workflow-Assistent für intelligente Aufgabenverarbeitung</p>
+            </div>
+
+            <!-- Modul 1: PDF Upload & KI-Analyse -->
+            <section class="module module-upload" id="moduleUpload">
+                <div class="module-header">
+                    <h2><span class="module-icon">📤</span> Aufgaben einlesen</h2>
+                    <p class="module-desc">Lade ein PDF hoch und lass die KI die Aufgaben analysieren</p>
+                </div>
+
+                <!-- Upload Zone -->
+                <div class="upload-zone" id="uploadZone">
+                    <input type="file" id="pdfInput" accept=".pdf" hidden>
+                    <div class="upload-content">
+                        <div class="upload-icon">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                        </div>
+                        <p class="upload-text">PDF hier ablegen oder <span class="upload-link">durchsuchen</span></p>
+                        <p class="upload-hint">Unterstützt: PDF-Dateien mit Aufgaben</p>
+                    </div>
+                </div>
+
+                <!-- File Info -->
+                <div class="file-info" id="fileInfo" style="display: none;">
+                    <div class="file-icon">📄</div>
+                    <div class="file-details">
+                        <span class="file-name" id="fileName">dokument.pdf</span>
+                        <span class="file-pages" id="filePages">0 Seiten</span>
+                    </div>
+                    <button class="file-remove" id="fileRemove" aria-label="Datei entfernen">×</button>
+                </div>
+
+                <!-- Analyze Button -->
+                <button class="btn btn-primary btn-analyze" id="analyzeBtn" disabled>
+                    <span class="btn-text">Aufgaben analysieren</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Results Area -->
+                <div class="results-container" id="resultsContainer" style="display: none;">
+                    <div class="results-tabs">
+                        <button class="tab-btn active" data-tab="fulltext">📄 Volltext</button>
+                        <button class="tab-btn" data-tab="core">🎯 Kernaufgaben</button>
+                    </div>
+                    
+                    <div class="results-content">
+                        <div class="result-panel active" id="resultFulltext">
+                            <div class="result-header">
+                                <h3>Vollständiger Aufgabentext</h3>
+                                <button class="copy-btn" data-target="resultFulltext" title="Kopieren">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="result-text" id="fulltextContent">
+                                <!-- Volltext wird hier eingefügt -->
+                            </div>
+                        </div>
+                        
+                        <div class="result-panel" id="resultCore">
+                            <div class="result-header">
+                                <h3>Extrahierte Kernaufgaben</h3>
+                                <button class="copy-btn" data-target="resultCore" title="Kopieren">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="result-text" id="coreContent">
+                                <!-- Kernaufgaben werden hier eingefügt -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Weiter zu Modul 2 -->
+                    <button class="btn btn-secondary btn-next" id="toModule2Btn" style="display: none;">
+                        Weiter zu Transformation →
+                    </button>
+                </div>
+            </section>
+
+            <!-- Modul 2: Aufgaben-Transformation -->
+            <section class="module module-transform" id="moduleTransform" style="display: none;">
+                <div class="module-header">
+                    <h2><span class="module-icon">🔄</span> Aufgaben transformieren</h2>
+                    <p class="module-desc">Wandle die Aufgaben in ein neues Themengebiet um</p>
+                </div>
+
+                <!-- Themengebiet Auswahl -->
+                <div class="transform-settings">
+                    <label class="settings-label" for="topicSelect">
+                        <span class="label-icon">📚</span>
+                        Ziel-Themengebiet
+                    </label>
+                    <select id="topicSelect" class="settings-select">
+                        <option value="">-- Themengebiet wählen --</option>
+                    </select>
+                    <p class="settings-hint">Die Aufgaben werden in dieses Thema umgewandelt</p>
+                </div>
+
+                <!-- Aufgaben-Liste -->
+                <div class="tasks-list" id="tasksList">
+                    <!-- Aufgaben werden hier dynamisch eingefügt -->
+                </div>
+
+                <!-- Transform Button -->
+                <button class="btn btn-primary btn-transform" id="transformBtn" disabled>
+                    <span class="btn-text">Alle Aufgaben transformieren</span>
+                    <span class="btn-loader" style="display: none;">
+                        <svg class="spinner" width="20" height="20" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" fill="none" stroke-dasharray="31.4 31.4" stroke-linecap="round"/>
+                        </svg>
+                    </span>
+                </button>
+
+                <!-- Transformierte Ergebnisse -->
+                <div class="transform-results" id="transformResults" style="display: none;">
+                    <div class="result-header">
+                        <h3>🎉 Transformierte Aufgaben</h3>
+                        <button class="copy-btn" id="copyAllTransformed" title="Alle kopieren">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="transformed-list" id="transformedList">
+                        <!-- Transformierte Aufgaben werden hier eingefügt -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Platzhalter für Modul 3 -->
+            <div class="modules-grid modules-future">
+                <div class="module-placeholder">
+                    <div class="placeholder-icon">📋</div>
+                    <span>Modul 3: Export</span>
+                    <p class="placeholder-hint">Bald verfügbar</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; <span id="year"></span> AufgabenTool</p>
+            <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+        </footer>
+    </div>
+
+    <!-- Settings Modal Overlay -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Einstellungen</h2>
+                <button class="modal-close" id="modalClose" aria-label="Schließen">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="modal-body">
+                <!-- OpenAI API Key -->
+                <div class="settings-group">
+                    <label class="settings-label" for="apiKey">
+                        <span class="label-icon">🔑</span>
+                        OpenAI API Key
+                    </label>
+                    <div class="input-wrapper">
+                        <input type="password" id="apiKey" class="settings-input" placeholder="sk-...">
+                        <button class="toggle-visibility" id="toggleApiKey" aria-label="API Key anzeigen">
+                            <svg class="eye-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                                <circle cx="12" cy="12" r="3"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Modell-Auswahl -->
+                <div class="settings-group">
+                    <label class="settings-label">
+                        <span class="label-icon">🤖</span>
+                        KI-Modelle
+                    </label>
+                    <p class="settings-hint">Wähle die Modelle für verschiedene Aufgaben</p>
+                    
+                    <div class="model-select-row">
+                        <div class="model-select-item">
+                            <label for="modelVision" class="model-label">Vision (OCR)</label>
+                            <select id="modelVision" class="settings-select">
+                                <option value="gpt-4o">GPT-4o (Empfohlen)</option>
+                                <option value="gpt-4o-mini">GPT-4o Mini (Schneller)</option>
+                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                            </select>
+                        </div>
+                        <div class="model-select-item">
+                            <label for="modelText" class="model-label">Text-Verarbeitung</label>
+                            <select id="modelText" class="settings-select">
+                                <option value="gpt-4o">GPT-4o (Empfohlen)</option>
+                                <option value="gpt-4o-mini">GPT-4o Mini (Schneller)</option>
+                                <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                                <option value="gpt-3.5-turbo">GPT-3.5 Turbo (Günstigst)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Themengebiete -->
+                <div class="settings-group">
+                    <label class="settings-label">
+                        <span class="label-icon">📚</span>
+                        Themengebiete
+                    </label>
+                    <p class="settings-hint">Diese stehen später zur Auswahl für die Aufgaben-Transformation</p>
+                    <div class="tags-container" id="tagsContainer">
+                        <!-- Tags werden hier dynamisch eingefügt -->
+                    </div>
+                    <div class="add-tag-wrapper">
+                        <input type="text" id="newTagInput" class="settings-input" placeholder="Neues Themengebiet...">
+                        <button class="add-tag-btn" id="addTagBtn">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="12" y1="5" x2="12" y2="19"></line>
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prompt Volltext-Extraktion -->
+                <div class="settings-group">
+                    <label class="settings-label" for="promptFullText">
+                        <span class="label-icon">📄</span>
+                        Prompt: Volltext-Extraktion
+                    </label>
+                    <p class="settings-hint">Dieser Prompt gibt den kompletten Aufgabentext aus dem PDF wieder</p>
+                    <textarea id="promptFullText" class="settings-textarea" rows="6" placeholder="Prompt für vollständige Textextraktion..."></textarea>
+                </div>
+
+                <!-- Prompt Kernaufgaben -->
+                <div class="settings-group">
+                    <label class="settings-label" for="promptCore">
+                        <span class="label-icon">🎯</span>
+                        Prompt: Kernaufgaben-Extraktion
+                    </label>
+                    <p class="settings-hint">Dieser Prompt extrahiert nur die wesentlichen Aufgabeninhalte ohne Fülltext</p>
+                    <textarea id="promptCore" class="settings-textarea" rows="6" placeholder="Prompt für Kernaufgaben-Extraktion..."></textarea>
+                </div>
+
+                <!-- Prompt Transformation -->
+                <div class="settings-group">
+                    <label class="settings-label" for="promptTransform">
+                        <span class="label-icon">🔄</span>
+                        Prompt: Aufgaben-Transformation
+                    </label>
+                    <p class="settings-hint">Dieser Prompt wandelt Aufgaben in ein neues Themengebiet um</p>
+                    <textarea id="promptTransform" class="settings-textarea" rows="6" placeholder="Prompt für Aufgaben-Transformation..."></textarea>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="modalCancel">Abbrechen</button>
+                <button class="btn btn-primary" id="modalSave">Speichern</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/theme.js"></script>
+    <script src="assets/js/settings.js"></script>
+    <script src="assets/js/upload.js"></script>
+    <script src="assets/js/transform.js"></script>
+</body>
+</html>
